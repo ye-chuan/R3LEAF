@@ -69,9 +69,12 @@ const ListOfPosts = ({ place, userID }) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    padding: 10,
-    backgroundColor: '#fff',
+    // flex: 1,
+    padding: 30,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    width: '100%',
+    backgroundColor: "#EAF2EC",
   },
   emptyText: {
     textAlign: 'center',
@@ -92,5 +95,4 @@ const styles = StyleSheet.create({
     color: 'red',
   },
 });
-
 export default ListOfPosts;

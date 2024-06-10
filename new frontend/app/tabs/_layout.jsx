@@ -5,6 +5,7 @@ import DirectMessage from './directMessage';
 import Homepage from './homepage';
 import Profile from './profile';
 import SharingPlace from './sharingPlace';
+import CreatePost from './CreatePost';
 
 const Tab = createBottomTabNavigator();
 
@@ -24,7 +25,9 @@ const Tabs = () => {
             iconName = focused ? 'chatbubbles' : 'chatbubbles-outline';
           } else if (route.name === 'Profile') {
             iconName = focused ? 'person' : 'person-outline';
-          } 
+          } else if (route.name === 'CreatePost'){
+            iconName = focused ? 'add' : 'add-outline';
+          }
 
           return <Ionicons name={iconName} size={size} color={color} />;
         },
@@ -34,6 +37,7 @@ const Tabs = () => {
     >
       <Tab.Screen name="Homepage" component={Homepage} />
       <Tab.Screen name="SharingPlace" component={SharingPlace} />
+      <Tab.Screen name="CreatePost" component={CreatePost} />
       <Tab.Screen name="DirectMessage" component={DirectMessage} />
       <Tab.Screen name="Profile" component={Profile} />
       

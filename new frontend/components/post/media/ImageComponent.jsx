@@ -1,13 +1,14 @@
 import React from 'react';
 import { View, Image, StyleSheet } from 'react-native';
 
-const ImageComponent = ({ imageUrl = "https://ezop.com/wp-content/uploads/2021/04/dos-donts-of-recycling-wisconsin-750x510.jpg", borderRadius = 10 }) => {
-  console.log("im renderin");
+const ImageComponent = ({ imageUrl, borderRadius }) => {
+  console.log('Rendering image:', imageUrl); // Debugging line
+
   return (
     <View style={styles.container}>
       <Image
         source={{ uri: imageUrl }}
-        style={[styles.image, { borderRadius: borderRadius }]}
+        style={[styles.image, { borderRadius }]}
       />
     </View>
   );
@@ -15,13 +16,14 @@ const ImageComponent = ({ imageUrl = "https://ezop.com/wp-content/uploads/2021/0
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    width: '100%',
+    height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
   },
   image: {
-    width: "100%", // Set the width of the image
-    height: "100%", // Set the height of the image
+    width: '100%', // Set the width of the image
+    height: '100%', // Set the height of the image
     resizeMode: 'cover', // You can change this to 'contain', 'stretch', etc.
   },
 });

@@ -1,12 +1,13 @@
 import React from 'react';
 import { StyleSheet, View, Image, Text } from "react-native";
 
-const CommentComponent = ({ 
-    authorName = "dolesswaste",
-    authorPic = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgQzVcNqn6PnmZvTMThsrrvW_gWVfnVA7FIQ&s",
-    commentText = "Participate in our community clean-up event this weekend! Together, we can make our local parks and beaches cleaner and greener.",
-    commentDate = "10-05"
-}) => {
+const CommentComponent = ({ commentDetails }) => {
+
+    const authorPic = commentDetails.authorPic;
+    const authorName = commentDetails.authorName;
+    const commentText = commentDetails.commentText;
+    const commentDate = commentDetails.commentDate;
+
     return (
         <View style={styles.card}>
             <View>

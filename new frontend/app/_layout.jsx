@@ -1,6 +1,7 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Tabs from './tabs/_layout'; // Adjust the path if necessary
+import PostWithComments from './utils/PostWithComments'; // Adjust the path if necessary
 
 const Stack = createNativeStackNavigator();
 
@@ -12,7 +13,11 @@ const MainLayout = () => {
         component={Tabs}
         options={{ headerShown: false }}
       />
-      {/* Add other screens or stacks here if needed */}
+      <Stack.Screen
+        name="utils/PostWithComments"
+        component={PostWithComments}
+        options={{ title: 'Post Details' }} // Add any screen options you need
+      />
     </Stack.Navigator>
   );
 };

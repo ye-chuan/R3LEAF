@@ -1,23 +1,23 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Image, Text } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, View, Image, Text, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import CommentIcon from './actions/CommentIcon';
 import PostBtn from './actions/PostBtn';
 import { IconType } from './actions/iconTypes';
-import ImageComponent from './media/ImageComponent';
 import VideoComponent from './media/VideoComponent';
-import CollageComponent from './media/CollageComponent';
+import ListOfImage from './media/ListOfImage';
 import YouTubeComponent from './media/YoutubeComponent'; 
 import { handleSave, handleLike } from '../../apicalls/post';
+import { useNavigation } from '@react-navigation/native';
 
 const UserPost = ({ postDetails, userID, isVisible }) => {
+  const navigation = useNavigation();
+
   const [heartCount, setHeartCount] = useState(postDetails.heartCount);
   const [commentCount, setCommentCount] = useState(postDetails.commentCount);
   const [bookmarkCount, setBookmarkCount] = useState(postDetails.bookmarkCount);
   const [heartLiked, setHeartLiked] = useState(postDetails.heartLiked);
   const [bookmarkLiked, setBookmarkLiked] = useState(postDetails.bookmarkLiked);
-  const [numberOfImage, setNumberOfImage] = useState(0);
-  const [singleImage, setSingleImage] = useState(null);
 
   const imageUrl = postDetails.imageUrl;
   const videoUrl = postDetails.videoUrl;
@@ -25,18 +25,6 @@ const UserPost = ({ postDetails, userID, isVisible }) => {
   const authorName = postDetails.authorName;
   const authorPic = postDetails.authorPic;
   const postCaption = postDetails.postCaption;
-
-  useEffect(() => {
-    if (Array.isArray(imageUrl)) {
-      if (imageUrl.length > 1) {
-        setNumberOfImage(imageUrl.length);
-        setSingleImage(false);
-      } else {
-        setSingleImage(true);
-        setNumberOfImage(1);
-      }
-    }
-  }, [imageUrl]);
 
   const handleClickLikeIcon = () => {
     setHeartLiked(!heartLiked);
@@ -50,8 +38,12 @@ const UserPost = ({ postDetails, userID, isVisible }) => {
     handleSave(postDetails.postID, userID);
   };
 
+  const handlePostPress = () => {
+    navigation.navigate('utils/PostWithComments', { postDetails, userID });
+  };
+
   return (
-    <View style={styles.card}>
+    <TouchableOpacity onPress={handlePostPress} style={styles.card}>
       <View style={styles.container}>
         <Image source={{ uri: authorPic }} style={styles.image} />
         <Text style={[styles.username, { color: '#5D7971' }]}>{authorName}</Text>
@@ -60,10 +52,9 @@ const UserPost = ({ postDetails, userID, isVisible }) => {
       <View style={styles.media}>
         <LinearGradient colors={['transparent', 'rgba(0,0,0,0.8)']} style={styles.overlay} />
         <View style={styles.attribute}>
-          {imageUrl && <CommentIcon size={20} color="white" oriCount={numberOfImage} iconType="image" />}
+          {imageUrl && <CommentIcon size={20} color="white" oriCount={imageUrl.length} iconType="image" />}
         </View>
-        {singleImage && imageUrl && <ImageComponent imageUrl={imageUrl[0]} />}
-        {!singleImage && imageUrl && <CollageComponent images={imageUrl} />}
+        {imageUrl && <ListOfImage imageUrls={imageUrl} />}
         {videoUrl && <VideoComponent videoUrl={videoUrl} isVisible={isVisible} />}
         {youtubeID && <YouTubeComponent videoId={youtubeID} />}
       </View>
@@ -84,7 +75,7 @@ const UserPost = ({ postDetails, userID, isVisible }) => {
           justifyContent="flex-end"
         />
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
@@ -93,6 +84,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
+    width: '100%'
   },
   actions: {
     flexDirection: 'row',
@@ -101,8 +93,9 @@ const styles = StyleSheet.create({
   },
   card: {
     flexDirection: 'column',
-    width: '90%',
-    height: 400,
+    width: '100%',
+    //height: '100%', 
+    paddingBottom:40, 
     gap: 10,
   },
   image: {
@@ -118,7 +111,7 @@ const styles = StyleSheet.create({
   },
   media: {
     backgroundColor: '#5D7971',
-    padding: 10,
+    // padding: 10,
     position: 'relative',
     width: '100%',
     height: 300,
@@ -132,6 +125,7 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     borderRadius: 15,
+    pointerEvents: 'none'
   },
   attribute: {
     position: 'absolute',
