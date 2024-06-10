@@ -1,27 +1,24 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { View, Text, FlatList, StyleSheet } from 'react-native';
 import UserPost from './post/UserPost';
-import { handleListOfPost } from '../apicalls/post'; // Import the API call
+import { handleListOfPost } from '../apicalls/post';
 
 const ListOfPosts = ({ place, userID }) => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [visibleItems, setVisibleItems] = useState([]);
 
   useEffect(() => {
-    // Fetch the list of posts when the component mounts
     const fetchPosts = async () => {
       try {
-        console.log("Fetching posts for place:", place, "and userID:", userID);
         const postDetailsList = await handleListOfPost(place, userID);
         if (Array.isArray(postDetailsList)) {
-          console.log("Fetched posts:", postDetailsList); // Debugging line
           setPosts(postDetailsList);
         } else {
           throw new Error("Invalid data format");
         }
       } catch (err) {
-        console.error("Error fetching posts:", err);
         setError(err);
       } finally {
         setLoading(false);
@@ -31,13 +28,18 @@ const ListOfPosts = ({ place, userID }) => {
     fetchPosts();
   }, [place, userID]);
 
-  const renderItem = ({ item }) => {
-    if (!item) {
-      console.warn("Encountered an undefined item in the list");
-      return null;
-    }
+  const onViewableItemsChanged = useCallback(({ viewableItems }) => {
+    setVisibleItems(viewableItems.map(item => item.key));
+  }, []);
 
-    return <UserPost postDetails={item} userID={userID} />;
+  const renderItem = ({ item }) => {
+    if (!item) return null;
+
+    return <UserPost postDetails={item} userID={userID} isVisible={visibleItems.includes(item.postID?.toString())} />;
+  };
+
+  const keyExtractor = (item) => {
+    return item && item.postID ? item.postID.toString() : Math.random().toString();
   };
 
   if (loading) {
@@ -56,7 +58,9 @@ const ListOfPosts = ({ place, userID }) => {
         <FlatList
           data={posts}
           renderItem={renderItem}
-          keyExtractor={(item) => (item && item.postID ? item.postID.toString() : Math.random().toString())}
+          keyExtractor={keyExtractor}
+          onViewableItemsChanged={onViewableItemsChanged}
+          viewabilityConfig={{ itemVisiblePercentThreshold: 50 }}
         />
       )}
     </View>

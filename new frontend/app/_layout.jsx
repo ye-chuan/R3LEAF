@@ -1,18 +1,20 @@
 import React from 'react';
-import { View, Text, SafeAreaView, ScrollView } from 'react-native';
-import ListOfPosts from '../components/ListOfPosts';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import Tabs from './tabs/_layout'; // Adjust the path if necessary
 
-const _layout = () => {
+const Stack = createNativeStackNavigator();
+
+const MainLayout = () => {
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-        <View>
-          <Text>Hello World</Text>
-          <ListOfPosts place='homepage' userID='BOB' />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+    <Stack.Navigator>
+      <Stack.Screen
+        name="tabs"
+        component={Tabs}
+        options={{ headerShown: false }}
+      />
+      {/* Add other screens or stacks here if needed */}
+    </Stack.Navigator>
   );
 };
 
-export default _layout;
+export default MainLayout;

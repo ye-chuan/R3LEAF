@@ -1,12 +1,13 @@
-import { View, Text } from "react-native";
-import React from "react";
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import MainLayout from './_layout'; // Adjust the path if necessary
 
-const index = () => {
+const App = () => {
   return (
-    <View>
-      <Text>index</Text>
-    </View>
+    <NavigationContainer>
+      <MainLayout />
+    </NavigationContainer>
   );
 };
 
-export default index;
+export default App;
