@@ -1,22 +1,19 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, Image, ScrollView, KeyboardAvoidingView, Platform, Keyboard } from 'react-native';
-import { Camera } from 'expo-camera';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, Image, ScrollView, KeyboardAvoidingView, Platform, Keyboard, Button } from 'react-native';
 import * as MediaLibrary from 'expo-media-library';
 import * as ImagePicker from 'expo-image-picker';
+import CameraComponent from '../../components/Camera'; // Adjust the path as necessary
 
 const CreatePost = () => {
-  const [hasPermission, setHasPermission] = useState(null);
-  const [cameraRef, setCameraRef] = useState(null);
-  const [cameraType, setCameraType] = useState(Camera.Constants.Type.back);
-  const [capturedImage, setCapturedImage] = useState(null);
   const [postContent, setPostContent] = useState('');
   const [media, setMedia] = useState([]);
 
   useEffect(() => {
-    (async () => {
-      const { status } = await Camera.requestPermissionsAsync();
+    (async () => {r
       const mediaStatus = await MediaLibrary.requestPermissionsAsync();
-      setHasPermission(status === 'granted' && mediaStatus.status === 'granted');
+      if (mediaStatus.status !== 'granted') {
+        alert('Permission to access media library is required!');
+      }
     })();
   }, []);
 
@@ -32,21 +29,8 @@ const CreatePost = () => {
     }
   };
 
-  const takePicture = async () => {
-    if (cameraRef) {
-      const photo = await cameraRef.takePictureAsync();
-      const asset = await MediaLibrary.createAssetAsync(photo.uri);
-      setMedia([...media, asset.uri]);
-      setCapturedImage(photo);
-    }
-  };
-
-  const toggleCameraType = () => {
-    setCameraType(
-      cameraType === Camera.Constants.Type.back
-        ? Camera.Constants.Type.front
-        : Camera.Constants.Type.back
-    );
+  const addCapturedMedia = (uri) => {
+    setMedia([...media, uri]);
   };
 
   const handleSubmit = () => {
@@ -54,19 +38,6 @@ const CreatePost = () => {
     console.log('Media:', media);
     // Handle post submission logic here
   };
-
-  if (hasPermission === null) {
-    return <View />;
-  }
-
-  if (hasPermission === false) {
-    return (
-      <View style={styles.container}>
-        <Text style={{ textAlign: 'center' }}>We need your permission to show the camera</Text>
-        <Button onPress={requestPermission} title="grant permission" />
-      </View>
-    );
-  }
 
   return (
     <KeyboardAvoidingView
@@ -86,14 +57,8 @@ const CreatePost = () => {
           <TouchableOpacity style={styles.button} onPress={pickImage}>
             <Text style={styles.buttonText}>Pick Image/Video</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={takePicture}>
-            <Text style={styles.buttonText}>Capture Photo</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={toggleCameraType}>
-            <Text style={styles.buttonText}>Flip Camera</Text>
-          </TouchableOpacity>
         </View>
-        <Camera style={styles.camera} type={cameraType} ref={(ref) => setCameraRef(ref)} />
+        <CameraComponent addCapturedMedia={addCapturedMedia} />
         <View style={styles.mediaContainer}>
           {media.map((uri, index) => (
             <Image key={index} source={{ uri }} style={styles.media} />
@@ -137,11 +102,6 @@ const styles = StyleSheet.create({
   buttonText: {
     color: '#fff',
     fontSize: 16,
-  },
-  camera: {
-    height: 300,
-    borderRadius: 10,
-    marginBottom: 20,
   },
   mediaContainer: {
     flexDirection: 'row',
