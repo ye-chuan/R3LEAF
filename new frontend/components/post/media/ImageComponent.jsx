@@ -24,6 +24,7 @@ const styles = StyleSheet.create({
   image: {
     width: '100%', // Set the width of the image
     height: '100%', // Set the height of the image
+    // height: 300,
     resizeMode: 'cover', // You can change this to 'contain', 'stretch', etc.
   },
 });

@@ -42,7 +42,7 @@ const PostWithComments = () => {
           data={[{ key: 'post' }, ...comments.map((comment, index) => ({ key: index.toString(), ...comment }))]}
           renderItem={({ item }) => {
             if (item.key === 'post') {
-              return <UserPost postDetails={postDetails} userID={userID} isVisible={true} />;
+              return <UserPost postDetails={postDetails} userID={userID} isVisible={true} darkMode={true}/>;
             }
             return renderComment({ item });
           }}
@@ -58,6 +58,7 @@ const PostWithComments = () => {
             value={comment}
             onChangeText={handleCommentChange}
             onSubmitEditing={handleCommentSubmit}
+            placeholderTextColor={'#ddd'}
           />
           <Text style={styles.sendButton} onPress={handleCommentSubmit}>
             Send
@@ -71,7 +72,8 @@ const PostWithComments = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#5D7971',
+    // padding: 30,
   },
   flex: {
     flex: 1,
@@ -85,19 +87,25 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 10,
     borderTopWidth: 1,
-    borderTopColor: '#ccc',
+    borderTopColor: '#fff',
+    paddingBottom: 30
   },
   input: {
     flex: 1,
     height: 40,
-    borderColor: '#ccc',
+    borderColor: '#fff',
     borderWidth: 1,
     borderRadius: 20,
     paddingHorizontal: 10,
     marginRight: 10,
+    color: '#fff'
   },
   sendButton: {
-    color: '#007BFF',
+    color: '#fff',
+    backgroundColor: '#28909E',
+    padding: 10,
+    borderRadius: 4,
+    overflow: 'hidden',
   },
 });
 
