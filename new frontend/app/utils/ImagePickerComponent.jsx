@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { View, Image, StyleSheet, TouchableOpacity, Text } from 'react-native';
+import { View, Image, StyleSheet, TouchableOpacity, Text, SafeAreaView } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { Camera } from 'expo-camera';
+import { useNavigation } from '@react-navigation/native';
 
 const ImagePickerComponent = ({ route }) => {
   const { handleUploadedImage } = route.params;
   const [selectedImage, setSelectedImage] = useState(null);
   const [hasPermission, setHasPermission] = useState(null);
+  const navigation = useNavigation();
 
   useEffect(() => {
     (async () => {
@@ -35,6 +37,7 @@ const ImagePickerComponent = ({ route }) => {
         setSelectedImage({ uri });
         handleUploadedImage(uri);
         console.log('URI:', uri);
+        navigation.goBack();  // Navigate back to the previous screen
       } else {
         alert('Image capture was cancelled');
       }
@@ -58,13 +61,14 @@ const ImagePickerComponent = ({ route }) => {
       setSelectedImage({ uri });
       handleUploadedImage(uri);
       console.log('URI:', uri);
+      navigation.goBack();  // Navigate back to the previous screen
     } else {
       alert('Image selection was cancelled');
     }
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       {selectedImage && <Image source={selectedImage} style={styles.image} />}
       <TouchableOpacity style={styles.button} onPress={handleOpenCamera}>
         <Text style={styles.buttonText}>Open Camera</Text>
@@ -72,7 +76,7 @@ const ImagePickerComponent = ({ route }) => {
       <TouchableOpacity style={styles.button} onPress={handleOpenGallery}>
         <Text style={styles.buttonText}>Upload Image</Text>
       </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -81,6 +85,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: 16,
+    height: '100%',
+    width: '100%',
+    backgroundColor: '#5D7971',
   },
   image: {
     width: 200,
@@ -91,14 +98,15 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: '#3E6B48',
     borderRadius: 8,
-    paddingVertical: 12,
-    paddingHorizontal: 24,
+    paddingVertical: 20,
+    paddingHorizontal: 50,
     marginVertical: 8,
   },
   buttonText: {
     color: '#fff',
-    fontSize: 16,
+    fontSize: 19,
   },
 });
 
 export default ImagePickerComponent;
+

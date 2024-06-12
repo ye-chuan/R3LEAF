@@ -23,13 +23,15 @@ const CreatePost = ({ title = "Create A Post", navigation }) => {
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.container}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 0}
       >
         <ScrollView contentContainerStyle={styles.scrollContent}>
           <View style={styles.header}>
             <Text style={styles.headerTitle}>{title}</Text>
           </View>
-          {imageUri && <Image source={{ uri: imageUri }} style={styles.image} />}
+          <View style={styles.imageCont}>
+            {imageUri && <Image source={{ uri: imageUri }} style={styles.image} />}
+          </View>
           <View style={styles.content}>
             <TextInput
               ref={inputRef}
@@ -72,10 +74,12 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
+    height: '100%',
   },
   scrollContent: {
     flexGrow: 1,
-    justifyContent: 'space-between',
+    height: '100%',
+    // justifyContent: 'space-between',
   },
   header: {
     flexDirection: 'row',
@@ -119,10 +123,16 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   image: {
-    width: 200,
-    height: 200,
+    width: 300,
+    height: 300,
     borderRadius: 8,
     marginTop: 16,
+  },
+  imageCont:{
+    width: "100%",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   footer: {
     flexDirection: 'row',
@@ -135,7 +145,7 @@ const styles = StyleSheet.create({
     color: '#fff',
   },
   postButton: {
-    backgroundColor: '#3E6B48',
+    backgroundColor: '#28909E',
     borderRadius: 8,
     paddingVertical: 12,
     paddingHorizontal: 24,

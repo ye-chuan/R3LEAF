@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TextInput, ActivityIndicator, Button, ScrollView, KeyboardAvoidingView, Platform } from "react-native";
+import { View, Text, Image, StyleSheet, TextInput, ActivityIndicator, Button, ScrollView, KeyboardAvoidingView, Platform } from "react-native";
 import React, { useState } from "react";
 import { firebase_auth } from "../../firebaseconfig"; // Adjust the path as necessary
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
@@ -46,7 +46,7 @@ const Login = () => {
     >
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <View style={styles.container}>
-          <Text style={styles.brand}>R3LEAF</Text>
+          <Image style={styles.logo} source={require('../../assets/logo/R3LEAF-green.png')}/>
           <TextInput
             value={email}
             style={styles.input}
@@ -77,12 +77,6 @@ const Login = () => {
 };
 
 const styles = StyleSheet.create({
-  brand: {
-    paddingTop: 100,
-    fontSize: 30,
-    textAlign: "center",
-    paddingBottom: 150,
-  },
   container: {
     flex: 1,
     backgroundColor: "#EAF2EC",
@@ -93,8 +87,9 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     height: 50,
     width: 250,
-    borderWidth: 1,
+    borderWidth: 2,
     borderRadius: 4,
+    borderColor: "#5D7971",
     padding: 10,
     backgroundColor: "#ffffff",
   },
@@ -103,6 +98,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     width: 250,
+  },
+  logo: {
+    height: 80,
+    width: '60%',
+    resizeMode: 'contain',
   },
 });
 
