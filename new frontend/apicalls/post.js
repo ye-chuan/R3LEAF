@@ -1,9 +1,10 @@
-export const handleListOfPost = async (place, userID) => {
+export const handleListOfPost = async (place, userID, productName, materialNmame ) => {
 
     return (
         [
             {
-                heartCount: 10, 
+                postID: 1, 
+                heartCount: 10,
                 commentCount: 10,
                 bookmarkCount: 10,
                 heartLiked: true,
@@ -11,7 +12,7 @@ export const handleListOfPost = async (place, userID) => {
                 imageUrl: ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgQzVcNqn6PnmZvTMThsrrvW_gWVfnVA7FIQ&s"],
                 authorName: "<NAME>",
                 authorPic: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgQzVcNqn6PnmZvTMThsrrvW_gWVfnVA7FIQ&s", 
-                postCaption: "HELLO WORLD", 
+                postCaption: "HELLO WORLD",
                 comments: [{
                     authorName : "dolesswaste",
                     authorPic : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgQzVcNqn6PnmZvTMThsrrvW_gWVfnVA7FIQ&s",
@@ -31,7 +32,7 @@ export const handleListOfPost = async (place, userID) => {
                 }]
             }, 
             {
-                heartCount: 10, 
+                heartCount: 10,
                 commentCount: 10,
                 bookmarkCount: 10,
                 heartLiked: true,
@@ -42,7 +43,7 @@ export const handleListOfPost = async (place, userID) => {
                     "https://ezop.com/wp-content/uploads/2021/04/dos-donts-of-recycling-wisconsin-750x510.jpg",
                  ],
                 authorName: "<NAME>",
-                authorPic: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgQzVcNqn6PnmZvTMThsrrvW_gWVfnVA7FIQ&s", 
+                authorPic: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgQzVcNqn6PnmZvTMThsrrvW_gWVfnVA7FIQ&s",
                 postCaption: "HELLO WORLD",
                 comments: [{
                     authorName : "dolesswaste",
@@ -123,11 +124,11 @@ export const handleListOfPost = async (place, userID) => {
 };
 
 export const handleLike = async (postID, userID, ) => {
-    
+    // send post ID and user ID, 
 };
 
 export const handleSave = async (postID, userID) => {
-    
+    // send post ID and user ID 
 };
 
 export const handleComment = async (postID, userID) => {

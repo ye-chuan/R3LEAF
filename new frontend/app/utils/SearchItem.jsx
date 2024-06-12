@@ -2,6 +2,7 @@ import { View, Text, Image, StyleSheet } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import ListOfPosts from '../../components/ListOfPosts';
 import SearchBar from '../../components/SearchBar'; // Adjust the path if necessary
+import Map from '../../components/Map';
 
 const SearchItem = ({ route }) => {
   const [inputItem, setInputItem] = useState(route.params.inputItem);
@@ -21,6 +22,7 @@ const SearchItem = ({ route }) => {
         <Text style={styles.title}>{inputItem}</Text>
         <SearchBar onSearchPress={handleSearchPress} />
       </View>
+      <Map/>
       <ListOfPosts place="search" userID="bob" productName={inputItem} />
     </View>
   );

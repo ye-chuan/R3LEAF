@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Image, StyleSheet, Alert } from 'react-native';
 import ListOfPosts from '../../components/ListOfPosts';
-import SearchBar from '../../components/SearchBar'; // Adjust the path if necessary
+import SearchBar from '../../components/SearchBar'; 
 
 const Homepage = ({ navigation }) => {
   console.log("homepage");
