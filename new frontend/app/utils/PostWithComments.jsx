@@ -39,7 +39,7 @@ const PostWithComments = () => {
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={styles.container}
-      keyboardVerticalOffset={90} // Adjust this value as needed
+      keyboardVerticalOffset={0} // Adjust this value as needed, was 90
     >
       <View style={styles.darkHeader}>
         <Pressable onPress={() => navigation.goBack()} style={styles.backBtn}>
@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   darkHeader:{
-    height: 100,
+    height: 120,
     width: '100%',
     position: 'relative'
   },
