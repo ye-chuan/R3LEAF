@@ -1,127 +1,142 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, Image, ScrollView, KeyboardAvoidingView, Platform, Keyboard, Button } from 'react-native';
-import * as MediaLibrary from 'expo-media-library';
-import * as ImagePicker from 'expo-image-picker';
-import CameraComponent from '../../components/Camera'; // Adjust the path as necessary
+import React, { useState, useEffect, useRef } from 'react';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, KeyboardAvoidingView, Platform, SafeAreaView, ScrollView, Keyboard } from 'react-native';
+import { FontAwesome } from '@expo/vector-icons';
+import Camera from '../../components/Camera'; // Adjust the path if necessary
 
-const CreatePost = () => {
-  const [postContent, setPostContent] = useState('');
-  const [media, setMedia] = useState([]);
+const CreatePost = ({ title = "Create A Post", navigation }) => {
+  const [text, onChangeText] = useState('');
+  const [showImagePicker, setShowImagePicker] = useState(false);
+  const inputRef = useRef(null);
 
   useEffect(() => {
-    (async () => {r
-      const mediaStatus = await MediaLibrary.requestPermissionsAsync();
-      if (mediaStatus.status !== 'granted') {
-        alert('Permission to access media library is required!');
+    const showKeyboard = () => {
+      if (inputRef.current) {
+        inputRef.current.focus();
       }
-    })();
+    };
+
+    showKeyboard();
   }, []);
 
-  const pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      quality: 1,
-    });
-
-    if (!result.cancelled) {
-      setMedia([...media, result.uri]);
-    }
-  };
-
-  const addCapturedMedia = (uri) => {
-    setMedia([...media, uri]);
-  };
-
-  const handleSubmit = () => {
-    console.log('Post Content:', postContent);
-    console.log('Media:', media);
-    // Handle post submission logic here
+  const handleUploadedImage = (image) => {
+    console.log('Image uploaded: ', image);
+    setShowImagePicker(false);
   };
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={styles.container}
-    >
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <TextInput
-          style={styles.input}
-          placeholder="Write your post here..."
-          multiline
-          numberOfLines={4}
-          onChangeText={setPostContent}
-          value={postContent}
-        />
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button} onPress={pickImage}>
-            <Text style={styles.buttonText}>Pick Image/Video</Text>
+    <SafeAreaView style={styles.safeArea}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={styles.container}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
+      >
+        <ScrollView contentContainerStyle={styles.scrollContent}>
+          <View style={styles.header}>
+            <Text style={styles.headerTitle}>{title}</Text>
+          </View>
+          <View style={styles.content}>
+            <TextInput
+              ref={inputRef}
+              style={styles.input}
+              onChangeText={onChangeText}
+              value={text}
+              placeholder="write your thoughts..."
+              placeholderTextColor="#fff"
+              multiline
+              autoFocus
+              blurOnSubmit={true}
+              onSubmitEditing={Keyboard.dismiss}
+            />
+            <TouchableOpacity style={styles.imageButton} onPress={() => setShowImagePicker(true)}>
+              <FontAwesome name="image" size={24} color="#fff" />
+              <Text style={styles.imageButtonText}>Add Image</Text>
+            </TouchableOpacity>
+            {showImagePicker && <Camera handleUploadedImage={handleUploadedImage} />}
+          </View>
+        </ScrollView>
+        <View style={styles.footer}>
+          <Text style={styles.footerText}>Anyone can like and comment</Text>
+          <TouchableOpacity style={styles.postButton}>
+            <Text style={styles.postButtonText}>Post</Text>
           </TouchableOpacity>
         </View>
-        <CameraComponent addCapturedMedia={addCapturedMedia} />
-        <View style={styles.mediaContainer}>
-          {media.map((uri, index) => (
-            <Image key={index} source={{ uri }} style={styles.media} />
-          ))}
-        </View>
-        <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
-          <Text style={styles.submitButtonText}>Post</Text>
-        </TouchableOpacity>
-      </ScrollView>
-    </KeyboardAvoidingView>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#5D7971',
+  },
   container: {
     flex: 1,
-    backgroundColor: '#fff',
   },
-  scrollContainer: {
+  scrollContent: {
     flexGrow: 1,
-    justifyContent: 'flex-start',
-  },
-  input: {
-    height: 100,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    padding: 10,
-    marginBottom: 20,
-    borderRadius: 10,
-  },
-  buttonContainer: {
-    flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 20,
   },
-  button: {
-    backgroundColor: '#007BFF',
-    padding: 10,
-    borderRadius: 10,
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 16,
-  },
-  mediaContainer: {
+  header: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
+    alignItems: 'center',
+    padding: 16,
+    backgroundColor: '#5D7971',
   },
-  media: {
-    width: 100,
-    height: 100,
-    borderRadius: 10,
-    margin: 5,
+  headerTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#fff',
+    marginLeft: 8,
   },
-  submitButton: {
-    backgroundColor: '#28a745',
-    padding: 15,
-    borderRadius: 10,
+  content: {
+    padding: 16,
     alignItems: 'center',
   },
-  submitButtonText: {
+  imageButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 16,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    backgroundColor: '#3E6B48',
+    borderRadius: 8,
+  },
+  imageButtonText: {
     color: '#fff',
-    fontSize: 18,
+    marginLeft: 8,
+    fontSize: 16,
+  },
+  input: {
+    width: '100%',
+    minHeight: 100,
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    borderRadius: 8,
+    padding: 16,
+    fontSize: 16,
+    color: '#fff',
+    marginBottom: 16,
+  },
+  footer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: 16,
+    backgroundColor: '#5D7971',
+  },
+  footerText: {
+    color: '#fff',
+  },
+  postButton: {
+    backgroundColor: '#3E6B48',
+    borderRadius: 8,
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+  },
+  postButtonText: {
+    color: '#fff',
+    fontSize: 16,
   },
 });
 

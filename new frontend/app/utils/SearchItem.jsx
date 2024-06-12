@@ -1,27 +1,27 @@
-import React from 'react';
-import { View, Image, StyleSheet, Alert } from 'react-native';
+import { View, Text, Image, StyleSheet } from 'react-native';
+import React, { useState, useEffect } from 'react';
 import ListOfPosts from '../../components/ListOfPosts';
 import SearchBar from '../../components/SearchBar'; // Adjust the path if necessary
 
-const Homepage = ({ navigation }) => {
-  console.log("homepage");
+const SearchItem = ({ route }) => {
+  const [inputItem, setInputItem] = useState(route.params.inputItem);
 
   const handleSearchPress = (searchQuery) => {
-    if (searchQuery.trim()) {
-      navigation.navigate('utils/SearchItem', { inputItem: searchQuery });
-    } else {
-      Alert.alert('Please enter a search query');
-    }
+    setInputItem(searchQuery);
   };
+
+  useEffect(() => {
+    // Any side effects or data fetching can be handled here if needed
+  }, [inputItem]);
 
   return (
     <View style={styles.container}>
       <View style={styles.headCont}>
         <Image source={require('../../assets/ui/page-header.png')} style={styles.headBg} />
-        <Image source={require('../../assets/logo/R3LEAF-icon.png')} style={styles.logo} />
+        <Text style={styles.title}>{inputItem}</Text>
         <SearchBar onSearchPress={handleSearchPress} />
       </View>
-      <ListOfPosts place="homepage" userID="bob" />
+      <ListOfPosts place="search" userID="bob" productName={inputItem} />
     </View>
   );
 };
@@ -33,6 +33,18 @@ const styles = StyleSheet.create({
     zIndex: 10,
     height: 130,
     width: '100%',
+  },
+  title: {
+    fontSize: 40,
+    fontWeight: 'bold',
+    position: 'absolute',
+    justifyContent: 'center',
+    alignItems: 'center',
+    top: 50,
+    zIndex: 11,
+    width: '100%',
+    textAlign: 'center',
+    color: "#fff",
   },
   headBg: {
     zIndex: 10,
@@ -58,4 +70,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Homepage;
+export default SearchItem;

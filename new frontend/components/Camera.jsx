@@ -1,90 +1,101 @@
-import { Camera, useCameraPermissions } from 'expo-camera';
-import { useState, useRef, useEffect } from 'react';
-import * as MediaLibrary from 'expo-media-library';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Image, StyleSheet, TouchableOpacity, Text, Alert } from 'react-native';
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
+import * as Permissions from 'expo-permissions';
 
-export default function CameraComponent({ addCapturedMedia }) {
-  const [permission, requestPermission] = useCameraPermissions();
-  const [facing, setFacing] = useState(Camera.Constants.Type.back);
-  const cameraRef = useRef();
+const ImagePickerComponent = ({ handleUploadedImage }) => {
+  const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => {
-    (async () => {
-      const { status } = await Camera.requestPermissionsAsync();
-      if (status !== 'granted') {
-        alert('Permission to access camera is required!');
+    const requestCameraPermission = async () => {
+      const { status } = await Permissions.askAsync(Permissions.CAMERA);
+      if (status === 'granted') {
+        handleOpenCamera();
+      } else {
+        Alert.alert('Camera Permission Denied');
       }
-    })();
+    };
+
+    requestCameraPermission();
   }, []);
 
-  const capturePhoto = async () => {
-    if (cameraRef.current) {
-      const photo = await cameraRef.current.takePictureAsync();
-      const asset = await MediaLibrary.createAssetAsync(photo.uri);
-      addCapturedMedia(asset.uri);
-    }
-  };
-
-  const toggleCameraFacing = () => {
-    setFacing(current => (current === Camera.Constants.Type.back ? Camera.Constants.Type.front : Camera.Constants.Type.back));
-  };
-
-  if (!permission) {
-    // Camera permissions are still loading.
-    return <View />;
-  }
-
-  if (!permission.granted) {
-    // Camera permissions are not granted yet.
-    return (
-      <View style={styles.container}>
-        <Text style={{ textAlign: 'center' }}>We need your permission to show the camera</Text>
-        <Button onPress={requestPermission} title="Grant permission" />
-      </View>
+  const handleOpenCamera = () => {
+    launchCamera(
+      {
+        mediaType: 'photo',
+        cameraType: 'back',
+        saveToPhotos: true,
+      },
+      (response) => {
+        if (response.didCancel) {
+          console.log('User cancelled image picker');
+        } else if (response.errorCode) {
+          console.log('ImagePicker Error: ', response.errorMessage);
+        } else {
+          const source = { uri: response.assets[0].uri };
+          setSelectedImage(source);
+          handleUploadedImage(source);
+        }
+      }
     );
-  }
+  };
+
+  const handleOpenGallery = () => {
+    launchImageLibrary(
+      {
+        mediaType: 'photo',
+      },
+      (response) => {
+        if (response.didCancel) {
+          console.log('User cancelled image picker');
+        } else if (response.errorCode) {
+          console.log('ImagePicker Error: ', response.errorMessage);
+        } else {
+          const source = { uri: response.assets[0].uri };
+          setSelectedImage(source);
+          handleUploadedImage(source);
+        }
+      }
+    );
+  };
 
   return (
-    <View style={styles.cameraContainer}>
-      <Camera style={styles.camera} type={facing} ref={cameraRef} autoFocus={true}>
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button} onPress={toggleCameraFacing}>
-            <Text style={styles.text}>Flip Camera</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={capturePhoto}>
-            <Text style={styles.text}>Capture</Text>
-          </TouchableOpacity>
-        </View>
-      </Camera>
+    <View style={styles.container}>
+      {selectedImage && <Image source={selectedImage} style={styles.image} />}
+      <TouchableOpacity style={styles.button} onPress={handleOpenCamera}>
+        <Text style={styles.buttonText}>Open Camera</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.button} onPress={handleOpenGallery}>
+        <Text style={styles.buttonText}>Upload Image</Text>
+      </TouchableOpacity>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
-  cameraContainer: {
+  container: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 20,
+    padding: 16,
   },
-  camera: {
-    width: '100%',
-    height: 300,
-  },
-  buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    width: '100%',
-    position: 'absolute',
-    bottom: 20,
+  image: {
+    width: 200,
+    height: 200,
+    borderRadius: 8,
+    marginBottom: 16,
+    alignSelf: 'center',
   },
   button: {
-    backgroundColor: '#fff',
-    padding: 10,
-    borderRadius: 10,
+    backgroundColor: '#3E6B48',
+    borderRadius: 8,
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    marginVertical: 8,
   },
-  text: {
+  buttonText: {
+    color: '#fff',
     fontSize: 16,
-    fontWeight: 'bold',
   },
 });
+
+export default ImagePickerComponent;

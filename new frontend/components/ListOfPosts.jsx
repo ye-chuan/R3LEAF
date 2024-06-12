@@ -4,7 +4,7 @@ import UserPost from './post/UserPost';
 import { handleListOfPost } from '../apicalls/post';
 import { useNavigation } from '@react-navigation/native';
 
-const ListOfPosts = ({ place, userID }) => {
+const ListOfPosts = ({ place, userID, productName = 'null'}) => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -14,7 +14,7 @@ const ListOfPosts = ({ place, userID }) => {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const postDetailsList = await handleListOfPost(place, userID);
+        const postDetailsList = await handleListOfPost(place, userID, productName);
         if (Array.isArray(postDetailsList)) {
           setPosts(postDetailsList);
         } else {

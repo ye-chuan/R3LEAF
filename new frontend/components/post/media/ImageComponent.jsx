@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Image, StyleSheet } from 'react-native';
 
 const ImageComponent = ({ imageUrl, borderRadius }) => {
-  console.log('Rendering image:', imageUrl); // Debugging line
+  // console.log('Rendering image:', imageUrl); // Debugging line
 
   return (
     <View style={styles.container}>

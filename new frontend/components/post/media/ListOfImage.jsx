@@ -3,7 +3,7 @@ import { View, FlatList, StyleSheet, ScrollView } from 'react-native';
 import ImageComponent from './ImageComponent';
 
 const ListOfImage = ({ imageUrls, borderRadius = 10 }) => {
-  console.log('Image URLs:', imageUrls); // Debugging line
+  // console.log('Image URLs:', imageUrls); // Debugging line
 
   return (
     <View style={styles.container}>

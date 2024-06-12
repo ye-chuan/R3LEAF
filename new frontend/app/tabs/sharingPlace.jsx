@@ -1,13 +1,19 @@
-import { View, Text, TextInput, Image, StyleSheet, Pressable } from "react-native";
-import { React, useState } from "react";
+import { View, Text, Image, StyleSheet } from "react-native";
+import { React } from "react";
 import ListOfPosts from '../../components/ListOfPosts';
-import { FontAwesome } from "@expo/vector-icons";
+import SearchBar from '../../components/SearchBar'; 
 
-const SharingPlace = () => {
-  const [searchQuery, setSearchQuery] = useState('');
 
-  const handleSearchChange = (text) => {
-    setSearchQuery(text);
+const SharingPlace = ({ navigation }) => {
+  console.log("SharingPlace");
+
+
+  const handleSearchPress = (searchQuery) => {
+    if (searchQuery.trim()) {
+      navigation.navigate('utils/SearchItem', { inputItem: searchQuery });
+    } else {
+      Alert.alert('Please enter a search query');
+    }
   };
 
   return (
@@ -15,21 +21,7 @@ const SharingPlace = () => {
       <View style={styles.headCont}>
         <Image source={require('../../assets/ui/page-header.png')} style={styles.headBg}/>
         <Text style={styles.title}>Sharing Place</Text>
-        <View style={styles.searchCont}>
-          <View style={styles.searchText}>
-            <TextInput
-              style={styles.searchBar}
-              placeholder="Search..."
-              placeholderTextColor="#FFF" 
-              value={searchQuery}
-              onChangeText={handleSearchChange}
-            />
-            <Pressable style={styles.searchBtn}
-            onPress={()=> {Alert.alert("hello")}}>
-              <FontAwesome name="search" size={20} color={"#fff"}/>
-            </Pressable>
-          </View>
-        </View>
+        <SearchBar onSearchPress={handleSearchPress} />
       </View>
       <ListOfPosts place="sharing" userID={'bob'} />
     </View>
