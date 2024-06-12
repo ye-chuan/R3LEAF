@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { View, TextInput, Pressable, StyleSheet, Alert, Keyboard } from 'react-native';
+import { View, TextInput, Pressable, StyleSheet, Keyboard } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 
 const itemList = ['Plastic Bottle', 'Plastic bag', 'Plastic', 'Metal Cans', 'Metal Bottle', 'Metal Bag', 'Glass Bottle', 'T-Shirts'];
 
 const getRandomItem = () => itemList[Math.floor(Math.random() * itemList.length)];
 
-const SearchBar = ({ onSearchPress }) => {
+const SearchBar = ({ navigation, onSearchPress, handleUploadedImage }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [placeholder, setPlaceholder] = useState('');
 
@@ -16,6 +16,8 @@ const SearchBar = ({ onSearchPress }) => {
     setPlaceholder(initial);
   }, []);
 
+
+
   const handleSearchChange = (text) => {
     setSearchQuery(text);
   };
@@ -23,8 +25,7 @@ const SearchBar = ({ onSearchPress }) => {
   const handlePress = () => {
     if (searchQuery === '') {
       onSearchPress(initial);
-    }
-    else{
+    } else {
       onSearchPress(searchQuery);
     }
 
@@ -47,7 +48,7 @@ const SearchBar = ({ onSearchPress }) => {
         </Pressable>
       </View>
       <View style={styles.searchCamera}>
-        <Pressable style={styles.cameraBtn} onPress={() => Alert.alert('hello')}>
+        <Pressable style={styles.cameraBtn} onPress={() => navigation.navigate('utils/ImagePickerComponent', { handleUploadedImage })}>
           <FontAwesome name="camera" size={20} color="#fff" />
         </Pressable>
       </View>

@@ -21,7 +21,7 @@ const SharingPlace = ({ navigation }) => {
       <View style={styles.headCont}>
         <Image source={require('../../assets/ui/page-header.png')} style={styles.headBg}/>
         <Text style={styles.title}>Sharing Place</Text>
-        <SearchBar onSearchPress={handleSearchPress} />
+        <SearchBar navigation={navigation} onSearchPress={handleSearchPress} />
       </View>
       <ListOfPosts place="sharing" userID={'bob'} />
     </View>

@@ -28,7 +28,7 @@ const SearchItem = ({ route }) => {
           <FontAwesome6 name="arrow-left" size={23} color="#fff"/>
         </Pressable>
         <Text style={styles.title}>{inputItem}</Text>
-        <SearchBar onSearchPress={handleSearchPress} />
+        <SearchBar navigation={navigation} onSearchPress={handleSearchPress} />
       </View>
       {/* <Map/> */}
       <ListOfPosts place="search" userID="bob" productName={inputItem} />

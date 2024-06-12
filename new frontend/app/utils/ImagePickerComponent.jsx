@@ -3,7 +3,8 @@ import { View, Image, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { Camera } from 'expo-camera';
 
-const ImagePickerComponent = ({ handleUploadedImage }) => {
+const ImagePickerComponent = ({ route }) => {
+  const { handleUploadedImage } = route.params;
   const [selectedImage, setSelectedImage] = useState(null);
   const [hasPermission, setHasPermission] = useState(null);
 

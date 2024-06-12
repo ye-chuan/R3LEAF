@@ -19,7 +19,7 @@ const Homepage = ({ navigation }) => {
       <View style={styles.headCont}>
         <Image source={require('../../assets/ui/page-header.png')} style={styles.headBg} />
         <Image source={require('../../assets/logo/R3LEAF-icon.png')} style={styles.logo} />
-        <SearchBar onSearchPress={handleSearchPress} />
+        <SearchBar navigation={navigation} onSearchPress={handleSearchPress} />
       </View>
       <ListOfPosts place="homepage" userID="bob" />
     </View>

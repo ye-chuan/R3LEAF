@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, TextInput, Image, StyleSheet, TouchableOpacity, KeyboardAvoidingView, Platform, SafeAreaView, ScrollView, Keyboard } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
-import ImagePickerComponent from '../../components/ImagePickerComponent'; // Adjust the path if necessary
 
 const CreatePost = ({ title = "Create A Post", navigation }) => {
   const [text, onChangeText] = useState('');
@@ -44,7 +43,15 @@ const CreatePost = ({ title = "Create A Post", navigation }) => {
               blurOnSubmit={true}
               onSubmitEditing={Keyboard.dismiss}
             />
-            {!imageUri &&<ImagePickerComponent handleUploadedImage={handleUploadedImage} />}
+            {!imageUri && (
+              <TouchableOpacity
+                style={styles.imageButton}
+                onPress={() => navigation.navigate('utils/ImagePickerComponent', { handleUploadedImage })}
+              >
+                <FontAwesome name="camera" size={24} color="#fff" />
+                <Text style={styles.imageButtonText}> Add Image</Text>
+              </TouchableOpacity>
+            )}
           </View>
         </ScrollView>
         <View style={styles.footer}>
@@ -95,6 +102,21 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#fff',
     marginBottom: 16,
+  },
+  imageButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 16,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    backgroundColor: '#3E6B48',
+    borderRadius: 8,
+  },
+  imageButtonText: {
+    color: '#fff',
+    marginLeft: 8,
+    fontSize: 16,
   },
   image: {
     width: 200,

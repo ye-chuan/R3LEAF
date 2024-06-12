@@ -4,6 +4,7 @@ import Tabs from './tabs/_layout'; // Adjust the path if necessary
 import PostWithComments from './utils/PostWithComments'; // Adjust the path if necessary
 import Login from './auth/Login'; // Adjust the path if necessary
 import SearchItem from './utils/SearchItem'; // Adjust the path if necessary
+import ImagePickerComponent from './utils/ImagePickerComponent'; // Adjust the path if necessary
 
 const Stack = createNativeStackNavigator();
 
@@ -28,6 +29,11 @@ const MainLayout = () => {
       <Stack.Screen
         name="utils/SearchItem"
         component={SearchItem}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen 
+        name="utils/ImagePickerComponent" 
+        component={ImagePickerComponent} 
         options={{ headerShown: false }}
       />
 
