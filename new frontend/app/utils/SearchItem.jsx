@@ -1,11 +1,16 @@
-import { View, Text, Image, StyleSheet } from 'react-native';
+import { View, Text, Image, StyleSheet, Pressable, TouchableOpacity } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import ListOfPosts from '../../components/ListOfPosts';
 import SearchBar from '../../components/SearchBar'; // Adjust the path if necessary
-import Map from '../../components/Map';
+import Tabs from '../tabs/_layout';
+import { FontAwesome6 } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+
+// import Map from '../../components/Map';
 
 const SearchItem = ({ route }) => {
   const [inputItem, setInputItem] = useState(route.params.inputItem);
+  const navigation = useNavigation();
 
   const handleSearchPress = (searchQuery) => {
     setInputItem(searchQuery);
@@ -19,10 +24,13 @@ const SearchItem = ({ route }) => {
     <View style={styles.container}>
       <View style={styles.headCont}>
         <Image source={require('../../assets/ui/page-header.png')} style={styles.headBg} />
+        <Pressable onPress={() => navigation.goBack()} style={styles.backBtn}>
+          <FontAwesome6 name="arrow-left" size={23} color="#fff"/>
+        </Pressable>
         <Text style={styles.title}>{inputItem}</Text>
         <SearchBar onSearchPress={handleSearchPress} />
       </View>
-      <Map/>
+      {/* <Map/> */}
       <ListOfPosts place="search" userID="bob" productName={inputItem} />
     </View>
   );
@@ -47,6 +55,12 @@ const styles = StyleSheet.create({
     width: '100%',
     textAlign: 'center',
     color: "#fff",
+  },
+  backBtn:{
+    position: 'absolute',
+    top: 65,
+    left: 30,
+    zIndex: 12,
   },
   headBg: {
     zIndex: 10,

@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, KeyboardAvoidingView, Platform, Keyboard } from 'react-native';
+import { View, Text, StyleSheet, TextInput, KeyboardAvoidingView, Platform, Keyboard, Pressable } from 'react-native';
 import UserPost from '../../components/post/UserPost';
 import CommentComponent from '../../components/post/CommentComponent';
 import { useRoute } from '@react-navigation/native';
 import { KeyboardAwareFlatList } from 'react-native-keyboard-aware-scroll-view';
+import { FontAwesome6 } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 
 const PostWithComments = () => {
   const route = useRoute();
+  const navigation = useNavigation();
+
   const { postDetails, userID } = route.params;
 
   const [comment, setComment] = useState('');
@@ -37,6 +41,12 @@ const PostWithComments = () => {
       style={styles.container}
       keyboardVerticalOffset={90} // Adjust this value as needed
     >
+      <View style={styles.darkHeader}>
+        <Pressable onPress={() => navigation.goBack()} style={styles.backBtn}>
+          <FontAwesome6 name="arrow-left" size={23} color="#fff"/>
+          <Text style={styles.title}>Post Details</Text>
+        </Pressable>
+      </View>
       <View style={styles.flex}>
         <KeyboardAwareFlatList
           data={[{ key: 'post' }, ...comments.map((comment, index) => ({ key: index.toString(), ...comment }))]}
@@ -88,7 +98,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderTopWidth: 1,
     borderTopColor: '#fff',
-    paddingBottom: 30
+    paddingBottom: 30,
   },
   input: {
     flex: 1,
@@ -106,6 +116,29 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 4,
     overflow: 'hidden',
+  },
+  darkHeader:{
+    height: 100,
+    width: '100%',
+    position: 'relative'
+  },
+  backBtn:{
+    position: 'absolute',
+    top: 65,
+    left: 30,
+    zIndex: 12,
+  },
+  title: {
+    fontSize: 30,
+    fontWeight: 'bold',
+    position: 'absolute',
+    // top: 0,
+    right: 50,
+    left: 50,
+    zIndex: 11,
+    width: 300,
+    textAlign: 'center',
+    color: "#fff",
   },
 });
 

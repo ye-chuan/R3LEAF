@@ -23,12 +23,14 @@ const MainLayout = () => {
       <Stack.Screen
         name="utils/PostWithComments"
         component={PostWithComments}
-        options={{ title: 'Post Details' }} // Add any screen options you need
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="utils/SearchItem"
         component={SearchItem}
+        options={{ headerShown: false }}
       />
+
     </Stack.Navigator>
   );
 };
