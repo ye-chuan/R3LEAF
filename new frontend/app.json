@@ -16,14 +16,24 @@
       "assets/fonts/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.jsm.R3LEAF",
+      "infoPlist": {
+        "NSCameraUsageDescription": "This app uses the camera to take photos.",
+        "NSPhotoLibraryUsageDescription": "This app needs access to your photo library to upload images."
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.jsm.R3LEAF"
+      "package": "com.jsm.R3LEAF",
+      "permissions": [
+        "CAMERA",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
