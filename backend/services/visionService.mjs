@@ -1,45 +1,43 @@
-import OpenAI from "openai";
-import { config } from "dotenv";
+import { spawn } from 'child_process';
+import { join } from 'path';
 
-config();
+// Function to run the Python script
+function runPythonScript(systemMessage, userMessage) {
+    return new Promise((resolve, reject) => {
+        const rootPath = new File("").getAbsolutePath();
+        const pythonPath = rootPath + "/.venv/bin/python3";
+        const scriptPath = rootPath + "/services/vision.py";
+        const pythonProcess = spawn(pythonPath, [join(__dirname, scriptPath), systemMessage, userMessage]);
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-  organization: process.env.OPENAI_ORG_ID // Optional: Only needed if you need to specify organization ID at initialization
-});
+        let output = '';
+        let errorOutput = '';
 
-async function vision(prompt, formatOutput) {
+        pythonProcess.stdout.on('data', (data) => {
+            output += data.toString();
+        });
 
-  try {
-    const response = await openai.chat.completions.create({
-      model: "gpt-4",
-      messages: prompt,
-      timeout: 60000, // 60 seconds
+        pythonProcess.stderr.on('data', (data) => {
+            errorOutput += data.toString();
+        });
+
+        pythonProcess.on('close', (code) => {
+            if (code !== 0) {
+                reject(new Error(`Python script exited with code ${code}\n${errorOutput}`));
+            } else {
+                resolve(output);
+            }
+        });
     });
-
-    // Log the full response object
-    console.log("Full API Response:", JSON.stringify(response, null, 2));
-
-    const formattedOutput = formatOutput(response.choices[0].message.content);
-    console.log("Formatted Output:", formattedOutput);
-
-    return formattedOutput;
-  } catch (error) {
-    if (error.response) {
-      // The request was made and the server responded with a status code
-      // that falls out of the range of 2xx
-      console.error("Error Response:", JSON.stringify(error.response.data, null, 2));
-      console.error("Error Status:", error.response.status);
-      console.error("Error Headers:", JSON.stringify(error.response.headers, null, 2));
-    } else if (error.request) {
-      // The request was made but no response was received
-      console.error("Error Request:", JSON.stringify(error.request, null, 2));
-    } else {
-      // Something happened in setting up the request that triggered an Error
-      console.error("Error Message:", error.message);
-    }
-    throw new Error("Failed to call OpenAI API");
-  }
 }
 
-export default vision;
+// Example usage
+const systemMessage = "Your system message here";
+const userMessage = "Your user message here";
+
+runPythonScript(systemMessage, userMessage)
+    .then(result => {
+        console.log('Python script output:', result);
+    })
+    .catch(error => {
+        console.error('Error running Python script:', error);
+    });

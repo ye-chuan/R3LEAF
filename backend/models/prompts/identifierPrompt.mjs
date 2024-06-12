@@ -48,4 +48,3 @@ const systemMessage = {
   }
 
   export {generateIdentifierPrompt, formatIdentifierOutput}
-  
