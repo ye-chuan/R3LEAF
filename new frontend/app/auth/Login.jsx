@@ -63,7 +63,7 @@ const Login = () => {
             onChangeText={(text) => setPassword(text)}
           />
           {loading ? (
-            <ActivityIndicator size="large" color="#0000ff" />
+            <ActivityIndicator size="large" color="#3E6B48" style={styles.loading}/>
           ) : (
             <View style={styles.loginpos}>
               <Button title="login" onPress={signIn} color="#5D7971" />
@@ -104,6 +104,10 @@ const styles = StyleSheet.create({
     width: '60%',
     resizeMode: 'contain',
   },
+  loading: {
+    position: 'absolute',
+    bottom: '30%'
+  }
 });
 
 export default Login;
