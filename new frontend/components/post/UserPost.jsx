@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Image, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Image, Text } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import CommentIcon from './actions/CommentIcon';
 import PostBtn from './actions/PostBtn';
@@ -9,7 +9,7 @@ import ListOfImage from './media/ListOfImage';
 import YouTubeComponent from './media/YoutubeComponent'; 
 import { handleSave, handleLike } from '../../apicalls/post';
 
-const UserPost = ({ postDetails, userID, isVisible, onPostPress, darkMode = false }) => {
+const UserPost = ({ postDetails, userID, isVisible, darkMode = false }) => {
   const [heartCount, setHeartCount] = useState(postDetails.heartCount);
   const [commentCount, setCommentCount] = useState(postDetails.commentCount);
   const [bookmarkCount, setBookmarkCount] = useState(postDetails.bookmarkCount);

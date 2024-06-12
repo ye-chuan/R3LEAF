@@ -1,26 +1,22 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, KeyboardAvoidingView, Platform, SafeAreaView, ScrollView, Keyboard } from 'react-native';
+import { View, Text, TextInput, Image, StyleSheet, TouchableOpacity, KeyboardAvoidingView, Platform, SafeAreaView, ScrollView, Keyboard } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
-import Camera from '../../components/Camera'; // Adjust the path if necessary
+import ImagePickerComponent from '../../components/ImagePickerComponent'; // Adjust the path if necessary
 
 const CreatePost = ({ title = "Create A Post", navigation }) => {
   const [text, onChangeText] = useState('');
-  const [showImagePicker, setShowImagePicker] = useState(false);
+  const [imageUri, setImageUri] = useState(null);
   const inputRef = useRef(null);
 
   useEffect(() => {
-    const showKeyboard = () => {
-      if (inputRef.current) {
-        inputRef.current.focus();
-      }
-    };
-
-    showKeyboard();
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
   }, []);
 
-  const handleUploadedImage = (image) => {
-    console.log('Image uploaded: ', image);
-    setShowImagePicker(false);
+  const handleUploadedImage = (uri) => {
+    setImageUri(uri);
+    console.log('Uploaded image URI:', uri); 
   };
 
   return (
@@ -28,12 +24,13 @@ const CreatePost = ({ title = "Create A Post", navigation }) => {
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.container}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 0}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
       >
         <ScrollView contentContainerStyle={styles.scrollContent}>
           <View style={styles.header}>
             <Text style={styles.headerTitle}>{title}</Text>
           </View>
+          {imageUri && <Image source={{ uri: imageUri }} style={styles.image} />}
           <View style={styles.content}>
             <TextInput
               ref={inputRef}
@@ -47,11 +44,7 @@ const CreatePost = ({ title = "Create A Post", navigation }) => {
               blurOnSubmit={true}
               onSubmitEditing={Keyboard.dismiss}
             />
-            <TouchableOpacity style={styles.imageButton} onPress={() => setShowImagePicker(true)}>
-              <FontAwesome name="image" size={24} color="#fff" />
-              <Text style={styles.imageButtonText}>Add Image</Text>
-            </TouchableOpacity>
-            {showImagePicker && <Camera handleUploadedImage={handleUploadedImage} />}
+            {!imageUri &&<ImagePickerComponent handleUploadedImage={handleUploadedImage} />}
           </View>
         </ScrollView>
         <View style={styles.footer}>
@@ -93,21 +86,6 @@ const styles = StyleSheet.create({
     padding: 16,
     alignItems: 'center',
   },
-  imageButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 16,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    backgroundColor: '#3E6B48',
-    borderRadius: 8,
-  },
-  imageButtonText: {
-    color: '#fff',
-    marginLeft: 8,
-    fontSize: 16,
-  },
   input: {
     width: '100%',
     minHeight: 100,
@@ -117,6 +95,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#fff',
     marginBottom: 16,
+  },
+  image: {
+    width: 200,
+    height: 200,
+    borderRadius: 8,
+    marginTop: 16,
   },
   footer: {
     flexDirection: 'row',
