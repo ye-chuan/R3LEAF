@@ -1,13 +1,15 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { View, Text, FlatList, StyleSheet } from 'react-native';
+import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 import UserPost from './post/UserPost';
 import { handleListOfPost } from '../apicalls/post';
+import { useNavigation } from '@react-navigation/native';
 
 const ListOfPosts = ({ place, userID }) => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [visibleItems, setVisibleItems] = useState([]);
+  const navigation = useNavigation();
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -32,10 +34,22 @@ const ListOfPosts = ({ place, userID }) => {
     setVisibleItems(viewableItems.map(item => item.key));
   }, []);
 
+  const handlePostPress = (postDetails) => {
+    navigation.navigate('utils/PostWithComments', { postDetails, userID });
+  };
+
   const renderItem = ({ item }) => {
     if (!item) return null;
 
-    return <UserPost postDetails={item} userID={userID} isVisible={visibleItems.includes(item.postID?.toString())} />;
+    return (
+      <TouchableOpacity onPress={() => handlePostPress(item)} style={styles.card}>
+        <UserPost
+          postDetails={item}
+          userID={userID}
+          isVisible={visibleItems.includes(item.postID?.toString())}
+        />
+      </TouchableOpacity>
+    );
   };
 
   const keyExtractor = (item) => {
@@ -67,14 +81,44 @@ const ListOfPosts = ({ place, userID }) => {
   );
 };
 
+// const styles = StyleSheet.create({
+//   container: {
+//     padding: 30,
+//     flexDirection: 'column',
+//     justifyContent: 'center',
+//     width: '100%',
+//     backgroundColor: "#EAF2EC",
+//   },
+//   emptyText: {
+//     textAlign: 'center',
+//     marginTop: 20,
+//     fontSize: 18,
+//     color: '#555',
+//   },
+//   loadingText: {
+//     textAlign: 'center',
+//     marginTop: 20,
+//     fontSize: 18,
+//     color: '#555',
+//   },
+//   errorText: {
+//     textAlign: 'center',
+//     marginTop: 20,
+//     fontSize: 18,
+//     color: 'red',
+//   },
+// });
+
+// export default ListOfPosts;
+
 const styles = StyleSheet.create({
   container: {
-    // flex: 1,
     padding: 30,
     flexDirection: 'column',
     justifyContent: 'center',
     width: '100%',
     backgroundColor: "#EAF2EC",
+    paddingBottom: 120,
   },
   emptyText: {
     textAlign: 'center',

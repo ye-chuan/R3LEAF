@@ -8,11 +8,8 @@ import VideoComponent from './media/VideoComponent';
 import ListOfImage from './media/ListOfImage';
 import YouTubeComponent from './media/YoutubeComponent'; 
 import { handleSave, handleLike } from '../../apicalls/post';
-import { useNavigation } from '@react-navigation/native';
 
-const UserPost = ({ postDetails, userID, isVisible }) => {
-  const navigation = useNavigation();
-
+const UserPost = ({ postDetails, userID, isVisible, onPostPress }) => {
   const [heartCount, setHeartCount] = useState(postDetails.heartCount);
   const [commentCount, setCommentCount] = useState(postDetails.commentCount);
   const [bookmarkCount, setBookmarkCount] = useState(postDetails.bookmarkCount);
@@ -38,12 +35,8 @@ const UserPost = ({ postDetails, userID, isVisible }) => {
     handleSave(postDetails.postID, userID);
   };
 
-  const handlePostPress = () => {
-    navigation.navigate('utils/PostWithComments', { postDetails, userID });
-  };
-
   return (
-    <TouchableOpacity onPress={handlePostPress} style={styles.card}>
+    <View>
       <View style={styles.container}>
         <Image source={{ uri: authorPic }} style={styles.image} />
         <Text style={[styles.username, { color: '#5D7971' }]}>{authorName}</Text>
@@ -75,15 +68,75 @@ const UserPost = ({ postDetails, userID, isVisible }) => {
           justifyContent="flex-end"
         />
       </View>
-    </TouchableOpacity>
+    </View>
   );
 };
+
+// const styles = StyleSheet.create({
+//   container: {
+//     flexDirection: 'row',
+//     alignItems: 'center',
+//     gap: 10,
+//     width: '100%'
+//   },
+//   actions: {
+//     flexDirection: 'row',
+//     alignItems: 'center',
+//     justifyContent: 'space-between',
+//   },
+//   card: {
+//     flexDirection: 'column',
+//     width: '100%',
+//     paddingBottom: 40,
+//     gap: 10,
+//   },
+//   image: {
+//     width: 30,
+//     height: 30,
+//     resizeMode: 'cover',
+//     borderRadius: 20,
+//     overflow: 'hidden',
+//   },
+//   username: {
+//     fontSize: 25,
+//     fontWeight: 'normal',
+//   },
+//   media: {
+//     backgroundColor: '#5D7971',
+//     position: 'relative',
+//     width: '100%',
+//     height: 300,
+//     borderRadius: 15,
+//   },
+//   overlay: {
+//     width: '100%',
+//     height: 300,
+//     position: 'absolute',
+//     zIndex: 1,
+//     top: 0,
+//     left: 0,
+//     borderRadius: 15,
+//     pointerEvents: 'none'
+//   },
+//   attribute: {
+//     position: 'absolute',
+//     bottom: 20,
+//     right: 20,
+//     zIndex: 2,
+//   },
+//   caption: {
+//     fontSize: 17,
+//     color: '#5D7971',
+//   },
+// });
+
+// export default UserPost;
 
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 10,
+    // gap: 10,
     width: '100%'
   },
   actions: {
@@ -95,7 +148,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     width: '100%',
     //height: '100%', 
-    paddingBottom:40, 
+    paddingVertical:30, 
     gap: 10,
   },
   image: {
@@ -135,7 +188,7 @@ const styles = StyleSheet.create({
   },
   caption: {
     fontSize: 17,
-    color: '#5D7971',
+    // color: '#5D7971',
   },
 });
 
