@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, FlatList, StyleSheet, ScrollView } from 'react-native';
+import { View, FlatList, StyleSheet, ScrollView, Dimensions } from 'react-native';
 import ImageComponent from './ImageComponent';
 
 const ListOfImage = ({ imageUrls, borderRadius = 10 }) => {
@@ -7,7 +7,7 @@ const ListOfImage = ({ imageUrls, borderRadius = 10 }) => {
 
   return (
     <View style={styles.container}>
-      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.scrollCont}>
         <FlatList
           data={imageUrls}
           horizontal
@@ -26,17 +26,20 @@ const ListOfImage = ({ imageUrls, borderRadius = 10 }) => {
 
 const styles = StyleSheet.create({
   container: {
-    height: 200,
+    width: '100%',
+    height: 300,
     justifyContent: 'center',
     alignItems: 'center',
   },
   imageWrapper: {
-    width: 200, // Adjust width to fit your design
+    width: Dimensions.get('window').width - 60, // Adjust width to fit your design
+    // width: '100%',
     height: '100%', // Adjust height to fit your design
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 10, // Add some spacing between images
   },
+ 
 });
 
 export default ListOfImage;

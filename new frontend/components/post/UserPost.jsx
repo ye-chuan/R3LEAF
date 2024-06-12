@@ -9,7 +9,7 @@ import ListOfImage from './media/ListOfImage';
 import YouTubeComponent from './media/YoutubeComponent'; 
 import { handleSave, handleLike } from '../../apicalls/post';
 
-const UserPost = ({ postDetails, userID, isVisible, onPostPress }) => {
+const UserPost = ({ postDetails, userID, isVisible, onPostPress, darkMode = false }) => {
   const [heartCount, setHeartCount] = useState(postDetails.heartCount);
   const [commentCount, setCommentCount] = useState(postDetails.commentCount);
   const [bookmarkCount, setBookmarkCount] = useState(postDetails.bookmarkCount);
@@ -36,14 +36,14 @@ const UserPost = ({ postDetails, userID, isVisible, onPostPress }) => {
   };
 
   return (
-    <View>
+    <View style={styles.card}>
       <View style={styles.container}>
-        <Image source={{ uri: authorPic }} style={styles.image} />
-        <Text style={[styles.username, { color: '#5D7971' }]}>{authorName}</Text>
+        <Image source={{ uri: authorPic }} style={styles.imagePic} />
+        <Text style={[styles.username, { color: darkMode ? 'white' : '#5D7971' }]}>{authorName}</Text>
       </View>
-      <Text style={styles.caption}>{postCaption}</Text>
+      <Text style={[styles.caption, { color: darkMode ? 'white' : '#5D7971' }]}>{postCaption}</Text>
       <View style={styles.media}>
-        <LinearGradient colors={['transparent', 'rgba(0,0,0,0.8)']} style={styles.overlay} />
+        <LinearGradient colors={['transparent', 'rgba(0,0,0,0.8)']} style={[styles.overlay, {display: darkMode ? 'none' : 'block' }]} />
         <View style={styles.attribute}>
           {imageUrl && <CommentIcon size={20} color="white" oriCount={imageUrl.length} iconType="image" />}
         </View>
@@ -58,86 +58,28 @@ const UserPost = ({ postDetails, userID, isVisible, onPostPress }) => {
           onClick={handleClickLikeIcon}
           iconType={IconType.HEART}
           justifyContent="flex-start"
+          color={ darkMode ? 'white' : '#5D7971' }
         />
-        <CommentIcon oriCount={commentCount} iconType="comment" />
+        <CommentIcon oriCount={commentCount} iconType="comment" color={ darkMode ? 'white' : '#5D7971' }/>
         <PostBtn
           oriCount={bookmarkCount}
           liked={bookmarkLiked}
           onClick={handleClickSavedIcon}
           iconType={IconType.BOOKMARK}
           justifyContent="flex-end"
+          color={ darkMode ? 'white' : '#5D7971' }
         />
       </View>
     </View>
   );
 };
 
-// const styles = StyleSheet.create({
-//   container: {
-//     flexDirection: 'row',
-//     alignItems: 'center',
-//     gap: 10,
-//     width: '100%'
-//   },
-//   actions: {
-//     flexDirection: 'row',
-//     alignItems: 'center',
-//     justifyContent: 'space-between',
-//   },
-//   card: {
-//     flexDirection: 'column',
-//     width: '100%',
-//     paddingBottom: 40,
-//     gap: 10,
-//   },
-//   image: {
-//     width: 30,
-//     height: 30,
-//     resizeMode: 'cover',
-//     borderRadius: 20,
-//     overflow: 'hidden',
-//   },
-//   username: {
-//     fontSize: 25,
-//     fontWeight: 'normal',
-//   },
-//   media: {
-//     backgroundColor: '#5D7971',
-//     position: 'relative',
-//     width: '100%',
-//     height: 300,
-//     borderRadius: 15,
-//   },
-//   overlay: {
-//     width: '100%',
-//     height: 300,
-//     position: 'absolute',
-//     zIndex: 1,
-//     top: 0,
-//     left: 0,
-//     borderRadius: 15,
-//     pointerEvents: 'none'
-//   },
-//   attribute: {
-//     position: 'absolute',
-//     bottom: 20,
-//     right: 20,
-//     zIndex: 2,
-//   },
-//   caption: {
-//     fontSize: 17,
-//     color: '#5D7971',
-//   },
-// });
-
-// export default UserPost;
-
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    // gap: 10,
-    width: '100%'
+    gap: 10,
+    width: '100%',
   },
   actions: {
     flexDirection: 'row',
@@ -148,10 +90,11 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     width: '100%',
     //height: '100%', 
-    paddingVertical:30, 
+    // paddingVertical: 30, 
     gap: 10,
+    padding: 30,
   },
-  image: {
+  imagePic: {
     width: 30,
     height: 30,
     resizeMode: 'cover',
@@ -169,6 +112,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 300,
     borderRadius: 15,
+    overflow: 'hidden'
   },
   overlay: {
     width: '100%',

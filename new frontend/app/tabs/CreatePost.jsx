@@ -28,7 +28,7 @@ const CreatePost = ({ title = "Create A Post", navigation }) => {
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.container}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 0}
       >
         <ScrollView contentContainerStyle={styles.scrollContent}>
           <View style={styles.header}>

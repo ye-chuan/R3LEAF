@@ -81,44 +81,15 @@ const ListOfPosts = ({ place, userID, productName = 'null'}) => {
   );
 };
 
-// const styles = StyleSheet.create({
-//   container: {
-//     padding: 30,
-//     flexDirection: 'column',
-//     justifyContent: 'center',
-//     width: '100%',
-//     backgroundColor: "#EAF2EC",
-//   },
-//   emptyText: {
-//     textAlign: 'center',
-//     marginTop: 20,
-//     fontSize: 18,
-//     color: '#555',
-//   },
-//   loadingText: {
-//     textAlign: 'center',
-//     marginTop: 20,
-//     fontSize: 18,
-//     color: '#555',
-//   },
-//   errorText: {
-//     textAlign: 'center',
-//     marginTop: 20,
-//     fontSize: 18,
-//     color: 'red',
-//   },
-// });
-
-// export default ListOfPosts;
-
 const styles = StyleSheet.create({
   container: {
-    padding: 30,
+    // padding: 30,
     flexDirection: 'column',
     justifyContent: 'center',
     width: '100%',
     backgroundColor: "#EAF2EC",
     paddingBottom: 120,
+    paddingTop: 30,
   },
   emptyText: {
     textAlign: 'center',

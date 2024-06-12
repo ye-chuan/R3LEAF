@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Image, Text } from "react-native";
+import { StyleSheet, View, Image, Text, Dimensions } from "react-native";
 
 const CommentComponent = ({ commentDetails }) => {
 
@@ -10,14 +10,14 @@ const CommentComponent = ({ commentDetails }) => {
 
     return (
         <View style={styles.card}>
-            <View>
+            <View style={styles.cardAuthor}>
                 <Image source={{ uri: authorPic }} style={styles.image}/>
             </View>
-            <View>
-                <Text style={[styles.username, {color: '#5D7971'}]}>{authorName}</Text>
+            <View style={styles.cardContent}>
+                <Text style={[styles.username, {color: '#fff'}]}>{authorName}</Text>
                 <Text style={styles.caption}>{commentText}</Text>
             </View>
-            <View>
+            <View style={styles.cardDate}>
                 <Text style={styles.attr}>{commentDate}</Text>
             </View>
         </View>
@@ -25,21 +25,19 @@ const CommentComponent = ({ commentDetails }) => {
 };
 
 const styles = StyleSheet.create({
-    container: {
-        // flexDirection: 'row',
-        // alignItems: 'center',
-        // gap: 10,
-    },
     card: {
         flexDirection: 'row',
-        width: "90%",
-        height: 100, // Adjusted height for better layout
-        gap: 10,
+        // width: Dimensions.get('window').width - 60,
+        width: '100%',
+        // height: 100, // Adjusted height for better layout
+        gap: 15,
         alignItems: 'center',
+        paddingVertical: 10,
+        paddingHorizontal: 30,
     }, 
     username: {
         fontSize: 17,
-        fontWeight: 'normal',
+        fontWeight: '600',
     },
     image: {
         width: 50,
@@ -49,13 +47,23 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
     },
     caption:{
-        fontSize: 16, // Adjusted font size for better layout
-        color: "#5D7971",
+        fontSize: 15, // Adjusted font size for better layout
+        color: "#fff",
     },
     attr: {
         fontSize: 12, // Adjusted font size for better layout
-        color: "#5D7971",
+        color: "#fff",
+    },
+    cardAuthor: {
+        flex: 1,
+    },
+    cardContent: {
+        flex: 4,
+    },
+    cardDate: {
+        flex: 1,
     }
+
 });
 
 export default CommentComponent;
